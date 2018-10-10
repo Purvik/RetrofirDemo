@@ -1,23 +1,27 @@
 package com.purvik.retrofirdemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-
-import com.purvik.retrofirdemo.API.ApiCall;
 import com.purvik.retrofirdemo.API.RoutineRequest;
-import com.purvik.retrofirdemo.API.RoutineResponseData;
-import static com.purvik.retrofirdemo.API.MyApplication.apiCall;
+import com.purvik.retrofirdemo.singleton.SingleUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.purvik.retrofirdemo.API.MyApplication.apiCall;
+
 public class MainActivity extends AppCompatActivity {
 
-    TextView mainTvView;
+    RecyclerView recyclerView;
+
 
 
     @Override
@@ -25,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainTvView = findViewById(R.id.mainTvView);
+        recyclerView = findViewById(R.id.recyclerView);
+
 
         RoutineRequest routineRequest = new RoutineRequest();
         routineRequest.setLoginuserID(Long.parseLong("32"));
@@ -33,19 +38,19 @@ public class MainActivity extends AppCompatActivity {
         routineRequest.setSchoolyearID(Long.parseLong("1"));
         routineRequest.setUsertypeID(Long.parseLong("4"));
 
-        Call<RoutineResponseData> call = apiCall.get_routine_data(routineRequest);
-        call.enqueue(new Callback<RoutineResponseData>() {
+        Call< List<SingleUser>> call = apiCall.getUserData();
+        call.enqueue(new Callback<List<SingleUser>>() {
             @Override
-            public void onResponse(Call<RoutineResponseData> call, Response<RoutineResponseData> response) {
+            public void onResponse(Call<List<SingleUser>> call, Response<List<SingleUser>> response) {
 
-                mainTvView.setText("Code:" + response.code());
+                Toast.makeText(getApplicationContext(),"Success:\n"+ response.code(), Toast.LENGTH_LONG).show();
 
             }
 
             @Override
-            public void onFailure(Call<RoutineResponseData> call, Throwable t) {
+            public void onFailure(Call<List<SingleUser>> call, Throwable t) {
 
-                mainTvView.setText("Failure:\n"+ t.getMessage());
+                Toast.makeText(getApplicationContext(),"Failure:\n"+ t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

@@ -26,9 +26,10 @@ public class MyApplication extends Application {
 
         //http://localhost:3000/api/
         //http://propathshala.vrithub.in/api/
+        //https://my.api.mockaroo.com/
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:3000/api/")
+                .baseUrl("https://my.api.mockaroo.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
