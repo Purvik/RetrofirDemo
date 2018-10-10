@@ -2,11 +2,13 @@ package com.purvik.retrofirdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.purvik.retrofirdemo.API.RoutineRequest;
+import com.purvik.retrofirdemo.adapters.UserListAdapter;
 import com.purvik.retrofirdemo.singleton.SingleUser;
 
 import java.util.ArrayList;
@@ -21,6 +23,10 @@ import static com.purvik.retrofirdemo.API.MyApplication.apiCall;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+
+    UserListAdapter userListAdapter;
+    List<SingleUser> singleUserList;
 
 
 
@@ -30,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        singleUserList = new ArrayList<>();
 
 
         RoutineRequest routineRequest = new RoutineRequest();
@@ -44,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<SingleUser>> call, Response<List<SingleUser>> response) {
 
                 Toast.makeText(getApplicationContext(),"Success:\n"+ response.code(), Toast.LENGTH_LONG).show();
+
+                singleUserList = response.body();
+
+                userListAdapter = new UserListAdapter(singleUserList);
+                recyclerView.setAdapter(userListAdapter);
 
             }
 
